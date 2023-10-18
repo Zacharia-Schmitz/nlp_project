@@ -98,17 +98,11 @@ Zacharia Schmitz<br>
 
 ### Project Description
 
-- I initially started with 2 datasets from the city of Los Angeles.
+The goal is to build a model that can predict the main programming language of a repository, given the text of the README file.
 
-- After combing, there was close to 3 million rows (2,943,476).
+## Plan → Acquire → Prepare → Explore → Model → Deliver
 
-- Each row was a unique incidence of crime in the Los Angeles area.
-
-- There was 29 different features about each crime. This only included the initial report, and not the final closed case details.
-
-- The target variable was a column created from the crime description, 'is_robbery'.
-
-- The comparison was ultimately Cluster 4 (Inglewood Area) versus all of the other areas.
+---
 <br>
 <br>
 
@@ -300,7 +294,7 @@ logreg = LogisticRegression(C=1, penalty='l2')
 
 **Train Set:** 84%
 
-**Test Set:** 57%
+**Test Set:** 66%
 
 <br>
 <br>
