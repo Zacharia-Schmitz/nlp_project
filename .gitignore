@@ -7,6 +7,6 @@ robinson-ds-content
 *.xlsx
 test*
 api_access
-*.csv
 working.ipynb
 *.pyc
+/working/
