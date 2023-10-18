@@ -13,6 +13,9 @@ from collections import Counter
 import random
 import joblib
 import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+from PIL import Image, ImageDraw, ImageFont
+import numpy as np
 
 nltk.download("stopwords")
 
@@ -589,40 +592,82 @@ def get_common_words(df, plot=True):
 
     return common_words_df
 
-# Import necessary libraries
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
 
-def generate_wordcloud(df, column='preprocessed_readme', word_count=50):
+def generate_wordcloud(
+    df,
+    column="preprocessed_readme",
+    word_count=50,
+    text="README",
+    fig_size=(21, 7),
+    width=1500,
+    height=700,
+):
+    """
+    Generates a wordcloud from the preprocessed readme text in a pandas DataFrame.
 
-    all_readmes = ' '.join(df['preprocessed_readme'])
-    all_words = re.findall(r'\w+', all_readmes.lower())
+    Parameters:
+    df (pandas.DataFrame): The DataFrame containing the preprocessed readme text.
+    column (str): The name of the column containing the preprocessed readme text.
+    word_count (int): The number of top words to include in the wordcloud.
+    text (str): The text to use as the mask for the wordcloud.
+
+    Returns:
+    None
+    """
+    # Join all preprocessed readme text into a single string
+    all_readmes = " ".join(df[column])
+
+    # Extract all words from the preprocessed readme text
+    all_words = re.findall(r"\w+", all_readmes.lower())
+
+    # Count the frequency of each word
     word_counts = Counter(all_words)
+
+    # Sort the words by frequency in descending order
     sorted_words = sorted(word_counts.items(), key=lambda x: x[1], reverse=True)
 
+    # Select the top X words by frequency
     top_x = sorted_words[:word_count]
     top_x_words = [word[0] for word in top_x]
     top_x_counts = [count[1] for count in top_x]
 
-    # Create a dictionary of top 20 words and their counts
+    # Create a dictionary of top words and their counts
     word_dict = dict(zip(top_x_words, top_x_counts))
 
-    # Generate wordcloud with blue color palette
-    wordcloud = WordCloud(width = 1500, height = 500, min_font_size = 10, max_font_size=50, colormap='Blues').generate_from_frequencies(word_dict)
+    # Generate mask for wordcloud
+    width, height = width, height
+    background_color = (255, 255, 255, 255)  # White with full opacity
+    text_color = (0, 0, 0, 0)  # Black with full transparency
+    img = Image.new("RGBA", (width, height), background_color)
+    draw = ImageDraw.Draw(img)
+
+    # Use a default font from PIL (replace with path to your font file if necessary)
+    font = ImageFont.truetype("support_files/arial.ttf", 350)
+    text = text
+    bbox = draw.textbbox((0, 0), text, font=font)
+    w, h = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    draw.text(((width - w) / 2, (height - h) / 2), text, font=font, fill=text_color)
+
+    mask = np.array(img)
+
+    # Generate wordcloud with blue color palette using the mask
+    wordcloud = WordCloud(
+        mask=mask,
+        background_color="black",
+        contour_width=1,
+        contour_color="white",
+        width=width,
+        height=height,
+        min_font_size=10,
+        max_font_size=100,
+        colormap="Blues",
+    ).generate_from_frequencies(word_dict)
 
     # Plot the wordcloud
-    plt.figure(figsize = (21, 7), facecolor = None)
-    plt.imshow(wordcloud)
+    plt.figure(figsize=fig_size, facecolor=None)
+    plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
-    plt.tight_layout(pad = 0)
+    plt.tight_layout(pad=0)
 
     # Show the plot
     plt.show()
-
-
-
-
-
-
-
-
