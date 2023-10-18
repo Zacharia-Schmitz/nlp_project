@@ -12,7 +12,7 @@ Zacharia Schmitz<br>
 
 ![Alt text](images/output.png)
 
-*Most Common Unique Words by Language*
+*Corpus Wordcloud*
 
 --- 
 
