@@ -10,7 +10,7 @@ Zacharia Schmitz<br>
 
 <p style="text-align: center;"> 
 
-![Alt text](images/words_by_lang.png)
+![Alt text](images/output.png)
 
 *Most Common Unique Words by Language*
 
