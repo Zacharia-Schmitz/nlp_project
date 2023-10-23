@@ -3,19 +3,20 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import time
 import pickle
-import wrangle as w
 import re
 import string
+import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-import nltk
 from collections import Counter
 import random
 import joblib
 import matplotlib.pyplot as plt
+import seaborn as sns
 from wordcloud import WordCloud
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
+
 
 nltk.download("stopwords")
 
@@ -670,4 +671,39 @@ def generate_wordcloud(
     plt.tight_layout(pad=0)
 
     # Show the plot
+    plt.show()
+
+
+def plot_top_words(df, num_words=20):
+    """
+    Plots a bar chart of the most common words in the preprocessed readme files in a dataframe.
+
+    Args:
+        df (pandas.DataFrame): A dataframe containing a 'preprocessed_readme' column.
+        num_words (int): The number of most common words to plot. Default is 20.
+
+    Returns:
+        None
+    """
+    # Concatenate all preprocessed readme files into a single string
+    all_readmes = ' '.join(df['preprocessed_readme'])
+
+    # Find all words in the string using regular expressions and count their frequency
+    all_words = re.findall(r'\w+', all_readmes.lower())
+    word_counts = Counter(all_words)
+
+    # Sort the words by their frequency in descending order
+    sorted_words = sorted(word_counts.items(), key=lambda x: x[1], reverse=True)
+
+    # Plot the top num_words words on a bar chart
+    top_words = sorted_words[:num_words]
+    top_word_labels = [word[0] for word in top_words]
+    top_word_counts = [count[1] for count in top_words]
+
+    plt.figure(figsize=(12, 8))
+    sns.barplot(x=top_word_labels, y=top_word_counts)
+    plt.title(f'{num_words} Most Common Words')
+    plt.xlabel('Word')
+    plt.ylabel('# of Occurrences')
+    plt.xticks(rotation=45)
     plt.show()
