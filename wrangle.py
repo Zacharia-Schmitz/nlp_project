@@ -319,6 +319,27 @@ def preprocess_text(text):
     return " ".join(tokens)
 
 
+def replace_symbols(text):
+    """
+    Replaces symbols in a text string with spaces.
+
+    Parameters:
+    - text (str): The text string to replace symbols in.
+
+    Returns:
+    - str: The text string with symbols replaced by spaces.
+    """
+    # If it has symbols besides alphanumeric, show the symbol
+    symbols = re.findall(r"[^a-zA-Z0-9\s]", text)
+
+    while symbols:
+        for symbol in symbols:
+            text = text.replace(symbol, " ")
+        symbols = re.findall(r"[^a-zA-Z0-9\s]", text)
+
+    return text
+
+
 def get_common_words(df):
     """
     Returns a DataFrame containing the 5 most common words for each programming language in the input DataFrame.
@@ -423,7 +444,6 @@ def plot_readme_length_distribution(df):
 
 def predict_language(
     readme_string=None,
-    preprocess_func=preprocess_text,
     tfidf_path="support_files/tfidf_vectorizer.pkl",
     logreg_path="support_files/logreg_model.pkl",
 ):
@@ -432,7 +452,6 @@ def predict_language(
 
     Parameters:
     - readme_string (str): The input README string. If None, a random string will be selected from the CSV file.
-    - preprocess_func (function): The function to preprocess the input text.
     - tfidf_path (str): Path to the saved TfidfVectorizer .pkl file.
     - logreg_path (str): Path to the saved LogisticRegression model .pkl file.
 
@@ -442,14 +461,15 @@ def predict_language(
 
     # If no readme_string is provided, select a random one from the CSV file
     if readme_string is None:
-        df = pd.read_csv("support_files/all_readmes_processed.csv")
+        df = pd.read_csv("support_files/processed_readmes.csv")
         random_index = random.randint(0, len(df) - 1)
         readme_string = df.loc[random_index, "preprocessed_readme"]
         print(f"Random String: {readme_string}\n")
         print(f"Actual Language: {df.loc[random_index, 'language']}")
 
     # Preprocess the input string
-    preprocessed_string = preprocess_func(readme_string)
+    preprocessed_string = preprocess_text(readme_string)
+    preprocessed_string = replace_symbols(readme_string)
 
     # Load the TfidfVectorizer and transform the string
     tfidf_vectorizer = joblib.load(tfidf_path)
@@ -686,10 +706,10 @@ def plot_top_words(df, num_words=20):
         None
     """
     # Concatenate all preprocessed readme files into a single string
-    all_readmes = ' '.join(df['preprocessed_readme'])
+    all_readmes = " ".join(df["preprocessed_readme"])
 
     # Find all words in the string using regular expressions and count their frequency
-    all_words = re.findall(r'\w+', all_readmes.lower())
+    all_words = re.findall(r"\w+", all_readmes.lower())
     word_counts = Counter(all_words)
 
     # Sort the words by their frequency in descending order
@@ -702,8 +722,8 @@ def plot_top_words(df, num_words=20):
 
     plt.figure(figsize=(12, 8))
     sns.barplot(x=top_word_labels, y=top_word_counts)
-    plt.title(f'{num_words} Most Common Words')
-    plt.xlabel('Word')
-    plt.ylabel('# of Occurrences')
+    plt.title(f"{num_words} Most Common Words")
+    plt.xlabel("Word")
+    plt.ylabel("# of Occurrences")
     plt.xticks(rotation=45)
     plt.show()
