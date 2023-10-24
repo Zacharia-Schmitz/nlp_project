@@ -465,7 +465,7 @@ def predict_language(
         random_index = random.randint(0, len(df) - 1)
         readme_string = df.loc[random_index, "preprocessed_readme"]
         print(f"Random String: {readme_string}\n")
-        print(f"Actual Language: {df.loc[random_index, 'language']}")
+        print(f"Actual:    {df.loc[random_index, 'language']}")
 
     # Preprocess the input string
     preprocessed_string = preprocess_text(readme_string)
@@ -477,10 +477,22 @@ def predict_language(
 
     # Load the LogisticRegression model and predict
     logreg_model = joblib.load(logreg_path)
-    prediction = logreg_model.predict(transformed_string)
+    prediction_probs = logreg_model.predict_proba(transformed_string)
+    prediction_index = np.argmax(prediction_probs)
+    prediction = logreg_model.classes_[prediction_index]
+    confidence_score = prediction_probs[0, prediction_index]
 
-    # Return the predicted language
-    print(f"Predicted: {prediction[0]}")
+    # Return the predicted language and confidence score
+    print(f"Predicted: {prediction} (Score: {confidence_score:.2f})\n")
+
+    # Return two possible predictions
+    top_indices = np.argsort(prediction_probs[0])[::-1][:3]
+    top_languages = logreg_model.classes_[top_indices]
+    top_probs = prediction_probs[0, top_indices]
+    print(f"Other possible predictions:")
+    for lang, prob in zip(top_languages, top_probs):
+        if lang != prediction:
+            print(f"{lang}: {prob:.2f}")
 
 
 def plot_unique_identifier_words(df, threshold=0, n=10):
