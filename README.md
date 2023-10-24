@@ -81,6 +81,18 @@ Aswathy Radha<br>
 
 7. Reusable Functionality
 
+---
+
+
+<br>
+
+### Project Description
+
+The goal is to build a model that can predict the main programming language of a repository, given the text of the README file.
+
+## Plan → Acquire → Prepare → Explore → Model → Deliver
+
+--- 
 
 ### Project Goals
 
@@ -93,16 +105,6 @@ Aswathy Radha<br>
 <br>
 <br>
 
----
-
-
-<br>
-
-### Project Description
-
-The goal is to build a model that can predict the main programming language of a repository, given the text of the README file.
-
-## Plan → Acquire → Prepare → Explore → Model → Deliver
 
 ---
 <br>
