@@ -84,9 +84,7 @@ Aswathy Radha<br>
 ---
 
 
-<br>
-
-### Project Description
+### Project Goal
 
 The goal is to build a model that can predict the main programming language of a repository, given the text of the README file.
 
@@ -94,7 +92,7 @@ The goal is to build a model that can predict the main programming language of a
 
 --- 
 
-### Project Goals
+### Project Description
 
 - With the Term Frequency-Inverse Document Frequency (TF-IDF) we'll weigh the term frequency (TF) with the inverse document frequency (IDF), which is a weight based on how many documents the word is in.
 
@@ -105,10 +103,6 @@ The goal is to build a model that can predict the main programming language of a
 <br>
 <br>
 
-
----
-<br>
-<br>
 
 ---
 
