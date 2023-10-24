@@ -16,9 +16,23 @@ import seaborn as sns
 from wordcloud import WordCloud
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
-from scipy.stats import ttest_ind
+from scipy.stats import mannwhitneyu
+from sklearn.model_selection import train_test_split
 
 nltk.download("stopwords")
+
+
+def split_data(df, random_state=123):
+    """Split into train, validate, test with a 60% train, 20% validate, 20% test"""
+    train_validate, test = train_test_split(df, test_size=0.2, random_state=123)
+    train, validate = train_test_split(train_validate, test_size=0.25, random_state=123)
+
+    print(f"Train: {len(train)} ({round(len(train)/len(df)*100)}% of {len(df)})")
+    print(
+        f"Validate: {len(validate)} ({round(len(validate)/len(df)*100)}% of {len(df)})"
+    )
+    print(f"Test: {len(test)} ({round(len(test)/len(df)*100)}% of {len(df)})")
+    return train, validate, test
 
 
 def fetch_github_data(url):
@@ -739,10 +753,6 @@ def plot_top_words(df, num_words=20):
     plt.ylabel("# of Occurrences")
     plt.xticks(rotation=45)
     plt.show()
-    
-    
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 
 def plot_readme_word_counts(df, word):
@@ -767,12 +777,11 @@ def plot_readme_word_counts(df, word):
     plt.ylabel("Count")
     plt.xticks(rotation=45)
     plt.show()
-    
 
 
-def ttest_word_counts(df, word, lang1, lang2):
+def m_whitney_word_counts(df, word, lang1, lang2):
     """
-    Performs a t-test to compare the occurrence of a given word in two languages.
+    Performs a mann whitney test to compare the occurrence of a given word in two languages.
 
     Args:
         df (pandas.DataFrame): A dataframe containing 'language' and 'preprocessed_readme' columns.
@@ -789,20 +798,14 @@ def ttest_word_counts(df, word, lang1, lang2):
     lang2_counts = counts[lang2]
 
     # Perform a t-test on the occurrence of the word in the two languages
-    t, p = ttest_ind(df.loc[df["language"] == lang1, "preprocessed_readme"].str.count(word),
-                     df.loc[df["language"] == lang2, "preprocessed_readme"].str.count(word),
-                     equal_var=False)
+    u, p = mannwhitneyu(
+        df.loc[df["language"] == lang1, "preprocessed_readme"].str.count(word),
+        df.loc[df["language"] == lang2, "preprocessed_readme"].str.count(word),
+    )
 
     # Print the results of the t-test
-    print(f"T-test for '{word}' between {lang1} and {lang2}:")
-    print(f"  t = {t:.2f}")
+    print(f"Mann-Whitney Test for '{word}' between {lang1} and {lang2}:")
+    print(f"  U-Stat = {u:.2f}")
     print(f"  p-value = {p:.4f}")
     print(f"  {lang1} count = {lang1_counts}")
-    print(f"  {lang2} count = {lang2_counts}")    
-    
-    
-    
-    
-    
-    
-    
+    print(f"  {lang2} count = {lang2_counts}")
