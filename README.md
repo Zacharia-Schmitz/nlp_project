@@ -111,19 +111,19 @@ The goal is to build a model that can predict the main programming language of a
 
 1. What are the most common words in READMEs?
 
-- READMEs pertaining to specific languages will have higher frequencies of certain keywords. JavaScript project might frequently mention "Node.js", "npm", or "React".
+    - READMEs pertaining to specific languages will have higher frequencies of certain keywords. JavaScript project might frequently mention "Node.js", "npm", or "React".
 
 2. Do different programming languages use a different number of unique words?
 
-- The mention of specific libraries or frameworks in the README can be indicative of the programming language. For instance, "Django" or "Flask" would be strong indicators for Python.
+    - The mention of specific libraries or frameworks in the README can be indicative of the programming language. For instance, "Django" or "Flask" would be strong indicators for Python.
 
 3. Are there any words that uniquely identify a programming language?
 
-- Certain phrases might be more commonly associated with specific languages. For example, "front-end" might be more associated with languages like JavaScript, while "data analysis" might be linked to Python or R.
+    - Certain phrases might be more commonly associated with specific languages. For example, "front-end" might be more associated with languages like JavaScript, while "data analysis" might be linked to Python or R.
 
 4. Do certain languages have overlapping libraries?
 
-- The way dependencies are installed and managed can be a hint. Commands like pip install point towards Python, while npm install points towards JavaScript.
+    - The way dependencies are installed and managed can be a hint. Commands like pip install point towards Python, while npm install points towards JavaScript.
 
 <br>
 
