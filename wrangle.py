@@ -16,7 +16,7 @@ import seaborn as sns
 from wordcloud import WordCloud
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
-
+from scipy.stats import ttest_ind
 
 nltk.download("stopwords")
 
@@ -739,3 +739,70 @@ def plot_top_words(df, num_words=20):
     plt.ylabel("# of Occurrences")
     plt.xticks(rotation=45)
     plt.show()
+    
+    
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+def plot_readme_word_counts(df, word):
+    """
+    Plots a bar chart of the number of occurrences of a given word in the preprocessed readme files for each language.
+
+    Args:
+        df (pandas.DataFrame): A dataframe containing 'language' and 'preprocessed_readme' columns.
+        word (str): The word to search for in the preprocessed readme files.
+
+    Returns:
+        None
+    """
+    # Count the number of occurrences of the word in each preprocessed readme file for each language
+    counts = df["preprocessed_readme"].str.count(word).groupby(df["language"]).sum()
+
+    # Plot the counts on a bar chart
+    plt.figure(figsize=(12, 8))
+    sns.barplot(x=counts.index, y=counts.values)
+    plt.title(f'Number of Occurrences of "{word}" in Preprocessed READMEs')
+    plt.xlabel("Language")
+    plt.ylabel("Count")
+    plt.xticks(rotation=45)
+    plt.show()
+    
+
+
+def ttest_word_counts(df, word, lang1, lang2):
+    """
+    Performs a t-test to compare the occurrence of a given word in two languages.
+
+    Args:
+        df (pandas.DataFrame): A dataframe containing 'language' and 'preprocessed_readme' columns.
+        word (str): The word to search for in the preprocessed readme files.
+        lang1 (str): The first language to compare.
+        lang2 (str): The second language to compare.
+
+    Returns:
+        None
+    """
+    # Calculate the number of occurrences of the word in each language
+    counts = df["preprocessed_readme"].str.count(word).groupby(df["language"]).sum()
+    lang1_counts = counts[lang1]
+    lang2_counts = counts[lang2]
+
+    # Perform a t-test on the occurrence of the word in the two languages
+    t, p = ttest_ind(df.loc[df["language"] == lang1, "preprocessed_readme"].str.count(word),
+                     df.loc[df["language"] == lang2, "preprocessed_readme"].str.count(word),
+                     equal_var=False)
+
+    # Print the results of the t-test
+    print(f"T-test for '{word}' between {lang1} and {lang2}:")
+    print(f"  t = {t:.2f}")
+    print(f"  p-value = {p:.4f}")
+    print(f"  {lang1} count = {lang1_counts}")
+    print(f"  {lang2} count = {lang2_counts}")    
+    
+    
+    
+    
+    
+    
+    
