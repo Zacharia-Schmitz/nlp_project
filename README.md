@@ -6,9 +6,9 @@
 ---
  
 Zacharia Schmitz<br>
-Joshua Click
-Aswathy Radha
-24 October 2023
+Joshua Click<br>
+Aswathy Radha<br>
+24 October 2023<br>
 
 <p style="text-align: center;"> 
 
