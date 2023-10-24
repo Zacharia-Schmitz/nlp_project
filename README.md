@@ -303,16 +303,32 @@ logreg = LogisticRegression(C=1, penalty='l2')
 
 1. The `predict_language()` function is in the last cell of the `final_draft.ipynb`.
 
-2. This can be used on a random README from the dataframe.
+2. Within the notebook, this can be used on a random README by leaving it blank
+    <i>**OR**</i><br>
+   or by using the readme_string key word argument
 
-3. This can also be used with the `readme_string` key word argument set to a string variable to predict the language.
+<u> For example, we used: </u>
 
 ```python
-def predict_language(
-    readme_string=None,
-    preprocess_func=preprocess_text,
-    tfidf_path="support_files/tfidf_vectorizer.pkl",
-    logreg_path="support_files/logreg_model.pkl",)
+readme = requests.get(
+    "https://raw.githubusercontent.com/Zacharia-Schmitz/nlp_project/main/README.md"
+).text
+
+predict_language(
+readme_string=readme,
+preprocess_func=preprocess_text,
+tfidf_path="support_files/tfidf_vectorizer.pkl",
+logreg_path="support_files/logreg_model.pkl",)
+```
+
+<u> Which returned: </u>
+
+```python
+Predicted: python (Score: 0.44)
+
+Other possible predictions:
+c++: 0.12
+javascript: 0.10
 ```
 
 
