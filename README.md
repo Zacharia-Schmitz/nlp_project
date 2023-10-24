@@ -100,7 +100,6 @@ The goal is to build a model that can predict the main programming language of a
 - Once both created, we'll export the TF-IDF and logistic regression as .pkl files to be applied with the created function, to be used on outside of set README strings.
 
 <br>
-<br>
 
 
 ---
