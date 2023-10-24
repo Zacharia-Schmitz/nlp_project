@@ -83,7 +83,6 @@ Aswathy Radha<br>
 
 ---
 
-
 ### Project Goal
 
 The goal is to build a model that can predict the main programming language of a repository, given the text of the README file.
